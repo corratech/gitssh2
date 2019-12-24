@@ -1,4 +1,4 @@
-FROM php:7.1-fpm-alpine3.8
+FROM php:7.3-fpm-alpine3.10
 
 RUN apk add --no-cache --virtual .persistent-deps git curl supervisor nginx icu-dev && \
   docker-php-ext-install intl && \
@@ -6,7 +6,7 @@ RUN apk add --no-cache --virtual .persistent-deps git curl supervisor nginx icu-
   docker-php-ext-install pdo_mysql
 
 ARG PHP_INI="$PHP_INI_DIR/php.ini"
-ARG TIMEZONE="Europe/Rome"
+ARG TIMEZONE="UTC"
 RUN \
   cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI" && \
   sed -i "s/^;date.timezone =$/date.timezone = \"$(echo $TIMEZONE | sed -e 's/\\/\\\\/g; s/\//\\\//g; s/&/\\\&/g')\"/" $PHP_INI
